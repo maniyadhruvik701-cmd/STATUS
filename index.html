@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Dashboard - STATUS</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- Auth Section -->
+    <div id="auth-section" class="auth-container">
+      <div id="signin-card" class="auth-card glass-panel">
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Elevate your workflow today</p>
+        <form id="signin-form">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" class="input-field" placeholder="name@company.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="input-field" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+        <div class="auth-footer" style="opacity: 0.5;">
+          Secure access restricted to administrator.
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="dashboard-layout hidden">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <i class="fas fa-cube" style="color: var(--primary);"></i>
+          <span>STATUS</span>
+        </div>
+        <nav>
+          <div class="nav-item active" id="nav-data-entry">
+            <i class="fas fa-table-list"></i>
+            <span>Data Entry</span>
+          </div>
+          <div class="nav-item" id="nav-reports">
+            <i class="fas fa-file-invoice"></i>
+            <span>To Do List</span>
+          </div>
+          <div class="nav-item" id="nav-performance">
+            <i class="fas fa-chart-pie"></i>
+            <span>Work Report</span>
+          </div>
+          <div class="nav-item" id="nav-pending">
+            <i class="fas fa-clock-rotate-left"></i>
+            <span>Pending Report</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Analytics</span>
+          </div>
+          <div class="nav-item">
+            <i class="fas fa-gear"></i>
+            <span>Settings</span>
+          </div>
+        </nav>
+        <div style="margin-top: auto;">
+          <div class="nav-item" id="logout-btn">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <div>
+            <h2 id="view-title" style="font-size: 1.8rem;">Data Entry</h2>
+            <p id="view-subtitle" style="color: var(--text-muted); font-size: 0.9rem;">Manage and input your records</p>
+          </div>
+          <div class="user-profile">
+            <div style="text-align: right;">
+              <p style="font-weight: 600;">Dhruvik</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Administrator</p>
+            </div>
+            <div class="avatar"></div>
+          </div>
+        </header>
+
+        <!-- Data Entry View -->
+        <section id="data-entry-view" class="data-entry-container">
+          <div class="action-bar">
+            <button class="btn-primary" id="addRowBtn" style="width: auto;">
+              <i class="fas fa-plus"></i> Add 50 New Entry
+            </button>
+            <button class="btn-secondary" id="exportBtn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
+            <button class="btn-danger" id="clearAllBtn" style="width: auto; background: var(--danger); color: white;">
+              <i class="fas fa-trash-can"></i> Clear All
+            </button>
+          </div>
+          <div class="table-wrapper glass-panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Company Name</th>
+                  <th>Platform <i class="fas fa-cog edit-config" data-config="platforms"></i></th>
+                  <th>Type <i class="fas fa-cog edit-config" data-config="types"></i></th>
+                  <th>Status <i class="fas fa-cog edit-config" data-config="statuses"></i></th>
+                  <th>Order Date</th>
+                  <th>Total Qty</th>
+                  <th>Follow up Date</th>
+                  <th>Comments</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+          <div id="pagination-controls" class="pagination"></div>
+        </section>
+
+        <!-- To Do List View -->
+        <section id="reports-view" class="data-entry-container hidden">
+          <div class="action-bar glass-panel" style="padding: 20px; display: flex; gap: 20px; align-items: flex-end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Select Date</label>
+              <input type="date" id="report-start-date" class="input-field" style="width: 200px;">
+            </div>
+            <button class="btn-primary" id="generate-report-btn" style="width: auto; margin-top: 0;">
+              <i class="fas fa-tasks"></i> Get Today's Work
+            </button>
+          </div>
+          <div id="report-results" class="hidden">
+            <div class="glass-panel" style="margin-top: 30px; padding: 20px;">
+              <table style="min-width: auto; width: 100%;">
+                <thead>
+                  <tr>
+                    <th style="color: var(--primary);">Status</th>
+                    <th style="text-align: center; color: var(--primary);">To Do (Count)</th>
+                  </tr>
+                </thead>
+                <tbody id="summary-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Work Report View -->
+        <section id="performance-view" class="data-entry-container hidden">
+          <div class="action-bar glass-panel" style="padding: 20px; display: flex; gap: 20px; align-items: flex-end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Start Date</label>
+              <input type="date" id="perf-start-date" class="input-field" style="width: 200px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>End Date</label>
+              <input type="date" id="perf-end-date" class="input-field" style="width: 200px;">
+            </div>
+            <button class="btn-primary" id="generate-perf-btn" style="width: auto; margin-top: 0;">
+              <i class="fas fa-chart-line"></i> Generate Report
+            </button>
+          </div>
+          <div id="perf-results" class="hidden">
+            <div class="glass-panel" style="margin-top: 30px; padding: 20px;">
+              <table style="min-width: auto; width: 100%;">
+                <thead>
+                  <tr>
+                    <th style="color: var(--secondary);">Work Done (Status)</th>
+                    <th style="text-align: center; color: var(--secondary);">Total Done</th>
+                  </tr>
+                </thead>
+                <tbody id="perf-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pending Report View -->
+        <section id="pending-report-view" class="data-entry-container hidden">
+          <div class="action-bar glass-panel" style="padding: 20px; display: flex; gap: 20px; align-items: flex-end;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Start Date</label>
+              <input type="date" id="pending-start-date" class="input-field" style="width: 200px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>End Date</label>
+              <input type="date" id="pending-end-date" class="input-field" style="width: 200px;">
+            </div>
+            <button class="btn-primary" id="generate-pending-btn" style="width: auto; margin-top: 0;">
+              <i class="fas fa-sync"></i> Generate Report
+            </button>
+          </div>
+          <div id="pending-results" class="hidden">
+            <div class="glass-panel" style="margin-top: 30px; padding: 20px;">
+              <table style="min-width: auto; width: 100%;">
+                <thead>
+                  <tr>
+                    <th style="color: var(--warning);">Status</th>
+                    <th style="text-align: center; color: var(--warning);">Total Pending</th>
+                  </tr>
+                </thead>
+                <tbody id="pending-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Options Modal -->
+    <div id="options-modal" class="modal-overlay hidden">
+      <div class="modal-content glass-panel">
+        <div class="modal-header">
+          <h2 id="modal-title">Manage Options</h2>
+          <button class="btn-icon" id="close-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="options-list" id="modal-options-list"></div>
+        <div class="form-group" style="display: flex; gap: 10px; margin-bottom: 0;">
+          <input type="text" id="new-option-input" class="input-field" placeholder="Add new option...">
+          <button id="add-option-btn" class="btn-primary" style="width: auto; margin-top: 0;">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
